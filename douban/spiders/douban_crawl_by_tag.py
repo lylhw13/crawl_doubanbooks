@@ -14,19 +14,19 @@ import string
 class DoubanCrawlByTagSpider(scrapy.Spider):
     name = 'douban_crawl_by_tag'
     allowed_domains = ['book.douban.com']
-    start_urls = ['http://book.douban.com/']
-    tags = ['经济学']
+    start_urls = ['http://book.douban.com/tag']
+    tags = []
     # url = "https://book.douban.com/tag/%E7%BB%8F%E6%B5%8E%E5%AD%A6"
     # Request(url=url, callback=self.parse)
 
     def __init__(self):
         self.fo_error = open('error_url_list.txt','w+')
-        self.info_tags_dict = {}
-        with open('info_tags.txt','r') as f:
-            for line in f:
-                key, value = line.split(':')
-                if key:
-                    self.info_tags_dict[key] = int(value.strip())
+        #self.info_tags_dict = {}
+        # with open('info_tags.txt','r') as f:
+        #     for line in f:
+        #         key, value = line.split(':')
+        #         if key:
+        #             self.info_tags_dict[key] = int(value.strip())
 
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
@@ -37,34 +37,50 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
     def spider_closed(self):
         print("spider closed")
         self.fo_error.close()
-        with open('info_tags.txt','w') as f:
-            for key, value in self.info_tags_dict.items():
-                f.write("{0}:{1}\n".format(key, value))
+        # with open('info_tags.txt','w') as f:
+        #     for key, value in self.info_tags_dict.items():
+        #         f.write("{0}:{1}\n".format(key, value))
 
     def start_requests(self):
         base_url = "https://book.douban.com/tag/"
+        yield Request(url=self.start_urls[0], callback=self.parse_tags)
+        # for tag in self.tags:
+        #     url = base_url + urllib.parse.quote(tag)
+        #     yield Request(url=url, callback=self.parse)
+
+    def parse_tags(self, response):
+        tags = response.xpath("//table[@class='tagCol']/tbody/tr/td/a/@href")
+        for tag in tags:
+            self.tags.append(tag.extract())
+            print(tag.extract())
+        base_url = self.start_urls[0]
         for tag in self.tags:
-            # url = base_url + urllib.parse.quote(tag)
-            url ="https://book.douban.com/tag/%E7%BB%8F%E6%B5%8E%E5%AD%A6"
+            print("current tag is {0}".format(tag))
+            #url = base_url + urllib.parse.quote(tag)
+            url = urllib.parse.urljoin(base_url, urllib.parse.quote(tag))
             yield Request(url=url, callback=self.parse)
+
+
 
     def parse(self, response):
         print(response.url)
-        with open('test.html','wb') as f:
-            f.write(response.body)
+        # with open('test.html','wb') as f:
+        #     f.write(response.body)
         items = response.xpath("//a[@class='nbg']/@href")
         for item in items:
             url = item.extract()
             if url:
                 print(url)
-                yield Request(url=url,
-                        cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
-                        callback=self.parse_content)
+                # yield Request(url=url,
+                #         cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
+                #         callback=self.parse_content)
+                yield Request(url=url, callback=self.parse_content)
         next_url = response.xpath("//link[@rel='next']/@href").extract()
         if next_url:
-            yield Request(url=urllib.parse.urljoin(response.url,next_url[0]),
-                        cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
-                        callback=self.parse)
+            # yield Request(url=urllib.parse.urljoin(response.url,next_url[0]),
+            #             cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
+            #             callback=self.parse)
+            yield Request(url=urllib.parse.urljoin(response.url,next_url[0]), callback=self.parse)
 
     def parse_content(self, response):
 
@@ -104,15 +120,18 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             if key[-1] in [':', '：']:
                 key = key[:-1]
 
-            if key in self.info_tags_dict.keys():
-                self.info_tags_dict[key] +=1
-            else:
-                self.info_tags_dict[key] = 1
+            # if key in self.info_tags_dict.keys():
+            #     self.info_tags_dict[key] +=1
+            # else:
+            #     self.info_tags_dict[key] = 1
+
+
 
             value = '/'.join([' '.join(val.split()) for val in ele_list[1:] if val not in [':', '：', '/']])
             info_dict[key] = value
 
         item['info'] = ''
+        main_info = ['作者', '出版社', '译者']
         for key, value in info_dict.items():
             item['info'] += "{}:{}\n".format(key, value)
 

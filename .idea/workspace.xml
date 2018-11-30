@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75020342-898e-46b0-b09d-d5d13fadf190" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/page_content.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/page_content.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/douban/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/douban/items.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,8 +22,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="18" column="69" lean-forward="true" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
+            <state relative-caret-position="253">
+              <caret line="124" column="19" selection-start-line="124" selection-start-column="19" selection-end-line="124" selection-end-column="19" />
               <folding>
                 <element signature="e#24#37#0" expanded="true" />
               </folding>
@@ -35,8 +34,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+            <state>
               <folding>
                 <element signature="e#43#77#0" expanded="true" />
               </folding>
@@ -47,8 +45,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/douban/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-551">
-              <caret line="31" column="18" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
+            <state relative-caret-position="37">
+              <caret line="31" column="18" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -56,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/douban/middlewares.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2432">
-              <caret line="128" column="49" selection-start-line="128" selection-start-column="49" selection-end-line="128" selection-end-column="49" />
+            <state relative-caret-position="1266">
+              <caret line="163" selection-start-line="163" selection-end-line="163" />
               <folding>
                 <element signature="e#169#195#0" expanded="true" />
                 <marker date="1534222431145" expanded="true" signature="4961:4977" ph="SELECT url F... s" />
@@ -70,8 +68,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/douban/pipelines.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="34" column="51" selection-start-line="34" selection-start-column="51" selection-end-line="34" selection-end-column="51" />
+            <state relative-caret-position="525">
+              <caret line="38" column="120" selection-start-line="38" selection-start-column="120" selection-end-line="38" selection-end-column="120" />
               <folding>
                 <element signature="e#194#208#0" expanded="true" />
                 <marker date="1534214615382" expanded="true" signature="1086:1124" ph="insert into seen_url... " />
@@ -84,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/douban/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="12" column="7" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
+            <state relative-caret-position="323">
+              <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -106,13 +104,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/douban/main.py" />
-        <option value="$PROJECT_DIR$/douban/items.py" />
         <option value="$PROJECT_DIR$/douban/pipelines.py" />
         <option value="$PROJECT_DIR$/tools/crawler_xici_ip.py" />
-        <option value="$PROJECT_DIR$/douban/settings.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py" />
         <option value="$PROJECT_DIR$/douban/middlewares.py" />
+        <option value="$PROJECT_DIR$/douban/settings.py" />
+        <option value="$PROJECT_DIR$/douban/items.py" />
+        <option value="$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py" />
       </list>
     </option>
   </component>
@@ -122,9 +120,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="185" />
-    <option name="y" value="625" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="326" />
+    <option name="y" value="344" />
     <option name="width" value="1456" />
     <option name="height" value="876" />
   </component>
@@ -133,7 +131,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -156,6 +153,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -283,21 +281,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <frame x="-1872" y="3" width="1456" height="876" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14066194" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20662905" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.63041764" weight="0.46453625" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49880764" weight="0.38923556" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.81593794" weight="0.7846568" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.55870765" weight="0.3889322" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49960256" weight="0.3299532" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49960256" weight="0.32839313" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.36958236" side_tool="true" visible="true" weight="0.46453625" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.18406206" side_tool="true" visible="true" weight="0.4535666" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49960256" weight="0.30421218" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
@@ -343,18 +341,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
-          <line>51</line>
+          <line>65</line>
           <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
-          <line>70</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/douban/middlewares.py</url>
@@ -385,6 +373,16 @@
           <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
           <line>14</line>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -462,10 +460,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/douban/pipelines.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret line="34" column="51" selection-start-line="34" selection-start-column="51" selection-end-line="34" selection-end-column="51" />
+          <folding>
+            <element signature="e#43#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/douban/middlewares.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1266">
+          <caret line="163" selection-start-line="163" selection-end-line="163" />
+          <folding>
+            <element signature="e#169#195#0" expanded="true" />
+            <marker date="1534222431145" expanded="true" signature="4961:4977" ph="SELECT url F... s" />
+            <marker date="1534222431145" expanded="true" signature="4961:4989" ph="SELECT url F... page_content" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/douban/pipelines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="38" column="120" selection-start-line="38" selection-start-column="120" selection-end-line="38" selection-end-column="120" />
           <folding>
             <element signature="e#194#208#0" expanded="true" />
             <marker date="1534214615382" expanded="true" signature="1086:1124" ph="insert into seen_url... " />
@@ -476,37 +495,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/douban/items.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="12" column="7" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/douban/middlewares.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2432">
-          <caret line="128" column="49" selection-start-line="128" selection-start-column="49" selection-end-line="128" selection-end-column="49" />
-          <folding>
-            <element signature="e#169#195#0" expanded="true" />
-            <marker date="1534222431145" expanded="true" signature="4961:4977" ph="SELECT url F... s" />
-            <marker date="1534222431145" expanded="true" signature="4961:4989" ph="SELECT url F... page_content" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
-          <folding>
-            <element signature="e#43#77#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="323">
+          <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/douban/spiders/douban_crawl_by_tag.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="18" column="69" lean-forward="true" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
+        <state relative-caret-position="253">
+          <caret line="124" column="19" selection-start-line="124" selection-start-column="19" selection-end-line="124" selection-end-column="19" />
           <folding>
             <element signature="e#24#37#0" expanded="true" />
           </folding>
@@ -515,8 +512,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/douban/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-551">
-          <caret line="31" column="18" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
+        <state relative-caret-position="37">
+          <caret line="31" column="18" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
         </state>
       </provider>
     </entry>
