@@ -116,8 +116,8 @@ from fake_useragent import UserAgent
 class RandomUserAgentMiddleware(object):
     def __init__(self, crawler):
         super(RandomUserAgentMiddleware,self).__init__()
-        self.ua = UserAgent()
-        self.ua_type = crawler.settings.get("RANDOM_UA_TYPE","random")
+        # self.ua = UserAgent()
+        # self.ua_type = crawler.settings.get("RANDOM_UA_TYPE","random")
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -127,7 +127,8 @@ class RandomUserAgentMiddleware(object):
 
         def get_ua():
             return getattr(self.ua, self.ua_type)
-        request.headers.setdefault('User-Agent', get_ua())
+        #request.headers.setdefault('User-Agent', get_ua())
+        request.headers.setdefault('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36')
 
 class RandomProxyMiddleware(object):
     def process_request(self, request, spider):
@@ -143,7 +144,7 @@ class CustomFilterMiddleware(RFPDupeFilter):
         self.redis_data_dict = "seen_url"
         self.redis_db.flushdb()
         if self.redis_db.hlen(self.redis_data_dict) ==0:
-            sql = "SELECT url FROM page_content"
+            sql = "SELECT url FROM page_content_new"
             df = pd.read_sql(sql, conn)
             for url in df['url'].get_values():
                 self.redis_db.hset(self.redis_data_dict, url, 0)

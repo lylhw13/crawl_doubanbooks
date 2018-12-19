@@ -54,7 +54,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             self.tags.append(tag.extract())
             print(tag.extract())
         base_url = self.start_urls[0]
-        for tag in self.tags:
+        for tag in self.tags[:2]:
             print("current tag is {0}".format(tag))
             #url = base_url + urllib.parse.quote(tag)
             url = urllib.parse.urljoin(base_url, urllib.parse.quote(tag))
@@ -88,20 +88,20 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
         item['url'] = response.url
 
-        item['num'] = list(filter(None, item['url'].split('/')))[-1]
+        item['id'] = list(filter(None, item['url'].split('/')))[-1]
 
         try:
             item['title'] = response.xpath("//span[@property='v:itemreviewed']/text()").extract()[0].strip()
-            item['image_url'] = response.xpath("//a[@class='nbg']/@href").extract()[0].strip()
+            item['img_url'] = response.xpath("//a[@class='nbg']/@href").extract()[0].strip()
             info = response.xpath("//div[@id='info']").extract()[0]
 
             # 处理评价人数过少的情况
-            item['rating_num'] = response.xpath("//strong[@class='ll rating_num ']/text()").extract()[0].strip()
-            if item['rating_num']:
-                item['rating_people'] = response.xpath("//a[@class='rating_people']/span/text()").extract()[0].strip()
+            item['rating'] = response.xpath("//strong[@class='ll rating_num ']/text()").extract()[0].strip()
+            if item['rating']:
+                item['people'] = response.xpath("//a[@class='rating_people']/span/text()").extract()[0].strip()
             else:
-                item['rating_num'] = '0'
-                item['rating_people'] = '0'
+                item['rating'] = '0'
+                item['people'] = '0'
 
         except Exception:
             message = '{0:30} has error during parse_content\n'.format(item['url'])
@@ -113,8 +113,8 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         info_list = [ele.strip() for ele in info.split('<br>')][:-1]    # the last one is </div>, remove it
         info_dict = collections.OrderedDict()
         for ele in info_list:
-            ele_sele = Selector(text=ele).xpath("//text()").extract()
-            ele_list = list(filter(None, [val.strip() for val in ele_sele]))
+            ele_else = Selector(text=ele).xpath("//text()").extract()
+            ele_list = list(filter(None, [val.strip() for val in ele_else]))
 
             key = ele_list[0]
             if key[-1] in [':', '：']:
@@ -125,17 +125,22 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             # else:
             #     self.info_tags_dict[key] = 1
 
-
-
             value = '/'.join([' '.join(val.split()) for val in ele_list[1:] if val not in [':', '：', '/']])
             info_dict[key] = value
 
         item['info'] = ''
-        main_info = ['作者', '出版社', '译者']
+        main_info = {'作者': 'author', '出版社': 'publisher', '出版年': 'date'}
         for key, value in info_dict.items():
-            item['info'] += "{}:{}\n".format(key, value)
+            if key in main_info.keys():
+                item[main_info[key]] = value
+            else:
+                item['info'] += "{}:{}\n".format(key, value)
+            # if key == '出版年':
+            #     item['publish_date'] = value
+            # elif key in main_info:
+            #     item['main_info'] += "{}:{}\n".format(key, value)
 
-        item['image_name'] = "{0}-{1}".format(item['title'], item['num'])
+        item['img_name'] = "{0}-{1}".format(item['title'], item['id'])
         tags = response.xpath("//div[@id='db-tags-section']/div/span/a/text()").extract()   #list
         item['tags'] = ','.join(tags)
 

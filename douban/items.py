@@ -10,20 +10,20 @@ import scrapy
 
 class DoubanItem(scrapy.Item):
     # define the fields for your item here like:
-    num = scrapy.Field()
+    url = scrapy.Field()
+    id = scrapy.Field()
 
     title = scrapy.Field()
+    author = scrapy.Field()
+    publisher = scrapy.Field()
+    date = scrapy.Field()
+
     info = scrapy.Field()
 
-    publish_date = scrapy.Field()
-
-    url = scrapy.Field()
-    image_url = scrapy.Field()
-    image_name = scrapy.Field()
-    tags = scrapy.Field()
-
-    rating_num = scrapy.Field()
+    img_name = scrapy.Field()
+    img_url = scrapy.Field()
+    rating = scrapy.Field()
+    people = scrapy.Field()     #评价人数
     stars_per = scrapy.Field()
 
-    rating_people = scrapy.Field()     #评价人数
-    pass
+    tags = scrapy.Field()

@@ -73,8 +73,8 @@ ITEM_PIPELINES = {
     'douban.pipelines.DownloadImagesPipeline': 20,
     'douban.pipelines.DoubanItemPipeline': 30,
 }
-IMAGES_URLS_FIELD = "image_url"
-IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)),"images")
+IMAGES_URLS_FIELD = "img_url"
+IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "images")
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

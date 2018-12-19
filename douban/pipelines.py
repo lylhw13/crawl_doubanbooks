@@ -17,11 +17,11 @@ class DoubanPipeline(object):
 
 class DownloadImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        url = item['image_url']
-        yield Request(url=url, meta={'image_name': item['image_name']}, dont_filter=True)
+        url = item['img_url']
+        yield Request(url=url, meta={'img_name': item['img_name']}, dont_filter=True)
 
     def file_path(self, request, response=None, info=None):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)), "images/{}.jpg".format(request.meta['image_name']))
+        return os.path.join(os.path.abspath(os.path.dirname(__file__)), "img/{}.jpg".format(request.meta['img_name']))
 
 
 class DoubanItemPipeline(object):
@@ -35,13 +35,19 @@ class DoubanItemPipeline(object):
         # self.cursor.execute(insert_seen_url, [item['url']])
         # self.conn.commit()
 
-        insert_info = """
-        insert into page_content (title, url, num, info, image_name, image_url, rating_num, rating_people, stars_per, tags)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        # insert_info = """
+        # insert into page_content (title, url, num, info, main_info, publish_date, image_name, image_url, rating_num, rating_people, stars_per, tags)
+        # VALUES (%s, %s, %s, %s, %s,%s%s, %s, %s, %s, %s, %s)"""
 
-        self.cursor.execute(insert_info, (item['title'], item['url'], item['num'], item['info'],
-                                          item['image_name'], item['image_url'], item['rating_num'],
-                                          item['rating_people'], item['stars_per'], item['tags']))
+        insert_info = """
+                insert into page_content_new
+                (url, id, title, author, publisher, date, info, img_name, img_url, rating, people, stars_per, tags) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+        self.cursor.execute(insert_info, (item['url'], item['id'], item['title'],
+                                          item['author'], item['publisher'], item['date'], item['info'],
+                                          item['img_name'], item['img_url'], item['rating'],
+                                          item['people'], item['stars_per'], item['tags']))
         self.conn.commit()
 
         return item
