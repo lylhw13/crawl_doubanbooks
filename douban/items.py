@@ -27,3 +27,5 @@ class DoubanItem(scrapy.Item):
     stars_per = scrapy.Field()
 
     tags = scrapy.Field()
+
+    relate_books = scrapy.Field()

@@ -50,4 +50,15 @@ class DoubanItemPipeline(object):
                                           item['people'], item['stars_per'], item['tags']))
         self.conn.commit()
 
+        insert_relation = """
+                INSERT INTO relate_books
+                (title, A, B, C, D, E, F, G, H, I, J)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+        if len(item['relate_books']) < 10:
+            item['relate_books'].extend([''] * (10 - len(item['relate_books'])))
+
+        self.cursor.execute(insert_relation, ('{0}-{1}'.format(item['title'],item['id']), *item['relate_books']))
+        self.conn.commit()
+
         return item
