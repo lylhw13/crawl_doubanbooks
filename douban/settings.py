@@ -56,8 +56,8 @@ DOWNLOAD_DELAY = 5
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'douban.middlewares.RandomUserAgentMiddleware': 1,
-    #'douban.middlewares.RandomProxyMiddleware': 2,
-   'douban.middlewares.DoubanDownloaderMiddleware': 543,
+    # 'douban.middlewares.RandomProxyMiddleware': 2,
+    'douban.middlewares.DoubanDownloaderMiddleware': 543,
 }
 DUPEFILTER_CLASS = 'douban.middlewares.CustomFilterMiddleware'
 

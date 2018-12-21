@@ -14,6 +14,7 @@ import pandas as pd
 import os
 import logging
 from tools.crawler_xici_ip import GetIP
+from tools.crawler_user_agent import GetUA
 
 class DoubanSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -125,10 +126,10 @@ class RandomUserAgentMiddleware(object):
 
     def process_request(self, request, spider):
 
-        def get_ua():
-            return getattr(self.ua, self.ua_type)
+        # def get_ua():
+        #     return getattr(self.ua, self.ua_type)
         #request.headers.setdefault('User-Agent', get_ua())
-        request.headers.setdefault('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36')
+        request.headers.setdefault('User-Agent', GetUA.get_random_ua())
 
 class RandomProxyMiddleware(object):
     def process_request(self, request, spider):
