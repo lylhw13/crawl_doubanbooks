@@ -129,12 +129,27 @@ class RandomUserAgentMiddleware(object):
         # def get_ua():
         #     return getattr(self.ua, self.ua_type)
         #request.headers.setdefault('User-Agent', get_ua())
-        request.headers.setdefault('User-Agent', GetUA.get_random_ua())
+        request.headers.setdefault('User-Agent', GetUA().get_random_ua())
 
+import base64
 class RandomProxyMiddleware(object):
+    def __init__(self):
+        self.proxyServer = "http://http-dyn.abuyun.com:9020"
+        self.proxyUser = "H458P57887EGATVD"
+        self.proxyPass = "7C38A97263576234"
+        self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
+        self.index = 0
     def process_request(self, request, spider):
-        request.meta["proxy"] = GetIP().get_random_ip()
+        #request.meta["proxy"] = GetIP().get_random_ip()
         #print(request.meta['proxy'])
+        if self.index > 6:
+            self.index = 0
+            print('*' * 30)
+        else:
+            self.index +=1
+
+        request.meta["proxy"] = self.proxyServer
+        request.headers["Proxy-Authorization"] = self.proxyAuth
 
 
 class CustomFilterMiddleware(RFPDupeFilter):

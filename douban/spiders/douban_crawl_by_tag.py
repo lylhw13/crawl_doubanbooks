@@ -54,7 +54,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             self.tags.append(tag.extract())
             print(tag.extract())
         base_url = self.start_urls[0]
-        for tag in self.tags[16:17]:
+        for tag in self.tags[12:13]:
             print("current tag is {0}".format(tag))
             url = urllib.parse.urljoin(base_url, urllib.parse.quote(tag))
             yield Request(url=url, callback=self.parse)
@@ -71,12 +71,12 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 #         cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
                 #         callback=self.parse_content)
                 yield Request(url=url, callback=self.parse_content)
-        # next_page = response.xpath("//link[@rel='next']/@href").extract()
-        # if next_page:
-        #     # yield Request(url=urllib.parse.urljoin(response.url,next_page[0]),
-        #     #             cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
-        #     #             callback=self.parse)
-        #     yield Request(url=urllib.parse.urljoin(response.url,next_page[0]), callback=self.parse)
+        next_page = response.xpath("//link[@rel='next']/@href").extract()
+        if next_page:
+            # yield Request(url=urllib.parse.urljoin(response.url,next_page[0]),
+            #             cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
+            #             callback=self.parse)
+            yield Request(url=urllib.parse.urljoin(response.url,next_page[0]), callback=self.parse)
 
     def parse_content(self, response):
 
@@ -126,13 +126,18 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 value = '/'.join([' '.join(val.split()) for val in ele_list[1:] if val not in [':', '：', '/']])
                 info_dict[key] = value
 
-            item['info'] = ''
             main_info = {'作者': 'author', '出版社': 'publisher', '出版年': 'date'}
+
+            item['info'] = ''      # init
+            for key in main_info.keys():
+                item[main_info[key]] = ''
+
             for key, value in info_dict.items():
                 if key in main_info.keys():
                     item[main_info[key]] = value
                 else:
                     item['info'] += "{}:{}\n".format(key, value)
+
 
             # if item['date']:        # format the date to fit mysql format
             #     date_part = item['date'].split('-')
@@ -140,7 +145,8 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             #         date_part.extend((3 - len(date_part)) * ['0'])
             #     item['date'] = '{0}-{1:0>2}-{2:0>2}'.format(*date_part)
 
-            item['img_name'] = "{0}-{1}".format(item['title'], item['id'])
+            # item['img_name'] = "{0}-{1}".format(item['title'], item['id'])
+            item['img_name'] = "{0}".format(item['id'])
             tags = response.xpath("//div[@id='db-tags-section']/div/span/a/text()").extract()   # list
             item['tags'] = ','.join(tags)
 
