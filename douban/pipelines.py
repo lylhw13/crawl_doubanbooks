@@ -51,7 +51,7 @@ class DoubanItemPipeline(object):
         self.conn.commit()
 
         insert_relation = """
-                INSERT INTO relate_books
+                INSERT IGNORE INTO relate_books
                 (title, A, B, C, D, E, F, G, H, I, J)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 

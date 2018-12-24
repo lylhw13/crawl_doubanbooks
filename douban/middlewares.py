@@ -132,21 +132,23 @@ class RandomUserAgentMiddleware(object):
         request.headers.setdefault('User-Agent', GetUA().get_random_ua())
 
 import base64
+import time
+from tools.showProxy import abyun
 class RandomProxyMiddleware(object):
     def __init__(self):
-        self.proxyServer = "http://http-dyn.abuyun.com:9020"
-        self.proxyUser = "H458P57887EGATVD"
-        self.proxyPass = "7C38A97263576234"
+        self.proxyServer = "http://http-cla.abuyun.com:9030"
+        self.proxyUser = "H74R4J0PNLA6131C"
+        self.proxyPass = "CEB943344CA9E602"
         self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
-        self.index = 0
+        self.currentTime = time.time()
     def process_request(self, request, spider):
         #request.meta["proxy"] = GetIP().get_random_ip()
         #print(request.meta['proxy'])
-        if self.index > 6:
-            self.index = 0
-            print('*' * 30)
-        else:
-            self.index +=1
+        if time.time() - self.currentTime > 3:
+            request.headers['Proxy-Switch-Ip'] = 'yes'
+            abyun(self.proxyUser, self.proxyPass).showProxy()
+            self.currentTime = time.time()
+            print("change the proxy")
 
         request.meta["proxy"] = self.proxyServer
         request.headers["Proxy-Authorization"] = self.proxyAuth

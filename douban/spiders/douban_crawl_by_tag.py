@@ -13,7 +13,7 @@ import string
 
 class DoubanCrawlByTagSpider(scrapy.Spider):
     name = 'douban_crawl_by_tag'
-    allowed_domains = ['book.douban.com']
+    #allowed_domains = ['book.douban.com']
     start_urls = ['http://book.douban.com/tag']
     tags = []
     # url = "https://book.douban.com/tag/%E7%BB%8F%E6%B5%8E%E5%AD%A6"
@@ -54,7 +54,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             self.tags.append(tag.extract())
             print(tag.extract())
         base_url = self.start_urls[0]
-        for tag in self.tags[12:13]:
+        for tag in self.tags[4:5]:
             print("current tag is {0}".format(tag))
             url = urllib.parse.urljoin(base_url, urllib.parse.quote(tag))
             yield Request(url=url, callback=self.parse)
@@ -70,13 +70,15 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 # yield Request(url=url,
                 #         cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
                 #         callback=self.parse_content)
-                yield Request(url=url, callback=self.parse_content)
-        next_page = response.xpath("//link[@rel='next']/@href").extract()
-        if next_page:
-            # yield Request(url=urllib.parse.urljoin(response.url,next_page[0]),
-            #             cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
-            #             callback=self.parse)
-            yield Request(url=urllib.parse.urljoin(response.url,next_page[0]), callback=self.parse)
+                url = 'https://book.douban.com/subject/4323895/'
+                yield Request(url=url, callback=self.parse_content, errback=self.errback)
+                #yield Request(url="http://proxy.abuyun.com/current-ip", meta="")
+        # next_page = response.xpath("//link[@rel='next']/@href").extract()
+        # if next_page:
+        #     # yield Request(url=urllib.parse.urljoin(response.url,next_page[0]),
+        #     #             cookies={"Cookie": "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))},
+        #     #             callback=self.parse)
+        #     yield Request(url=urllib.parse.urljoin(response.url,next_page[0]), callback=self.parse, errback=self.errback)
 
     def parse_content(self, response):
 
@@ -93,16 +95,22 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             info = response.xpath("//div[@id='info']").extract()[0]
 
             # 处理评价人数过少的情况
-            item['rating'] = response.xpath("//strong[@class='ll rating_num ']/text()").extract()[0].strip()
-            if item['rating']:
-                item['people'] = response.xpath("//a[@class='rating_people']/span/text()").extract()[0].strip()
-            else:
-                item['rating'] = '0'
-                item['people'] = '0'
+            rating_item = response.xpath("//strong[@class='ll rating_num ']/text()").extract()
+            item['rating'] = rating_item[0].strip() if len(rating_item) != 0 and len(rating_item[0].strip())!=0 else '0'
+            # if len(rating_item) != 0:
+            #     item['rating'] = response.xpath("//strong[@class='ll rating_num ']/text()").extract()[0].strip()
+            #     item['people'] = response.xpath("//a[@class='rating_people']/span/text()").extract()[0].strip()
+            # else:
+            #     item['rating'] = '0'
+            #     item['people'] = '0'
+
+            people_item = response.xpath("//a[@class='rating_people']/span/text()").extract()
+            item['people'] = people_item[0].strip() if len(people_item) != 0 and len(people_item[0].strip())!=0else '0'
+
 
         except Exception:
             message = '{0:30} has error during parse_content\n'.format(item['url'])
-            print(message)
+            print('-'*150 + message)
             self.fo_error.write(message)
             error_flag = True
 
@@ -172,3 +180,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
             if not error_flag:
                 yield item
+
+    def errback(self, failure):
+        print("@"*60 + "hadle the failure")
+        self.logger.error(repr(failure))
