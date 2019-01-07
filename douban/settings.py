@@ -29,13 +29,14 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.25
+DOWNLOAD_DELAY = 0.2
+# RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -56,7 +57,7 @@ DOWNLOAD_DELAY = 0.25
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'douban.middlewares.RandomUserAgentMiddleware': 1,
-    #'douban.middlewares.RandomProxyMiddleware': 2,
+    'douban.middlewares.RandomProxyMiddleware': 2,
     'douban.middlewares.DoubanDownloaderMiddleware': 543,
 }
 DUPEFILTER_CLASS = 'douban.middlewares.CustomFilterMiddleware'
@@ -80,12 +81,12 @@ IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "images"
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-AUTOTHROTTLE_START_DELAY = 1
+AUTOTHROTTLE_START_DELAY = 0.5
 # The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 30
+AUTOTHROTTLE_MAX_DELAY = 3
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-AUTOTHROTTLE_TARGET_CONCURRENCY = 2
+AUTOTHROTTLE_TARGET_CONCURRENCY = 0.89
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 

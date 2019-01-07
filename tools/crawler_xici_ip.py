@@ -10,8 +10,8 @@ cursor = conn.cursor()
 
 def crawl_ips():
     headers = {"User-Agent": "Mozilla/5.0 (X11; NetBSD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36"}
-    for page in range(16, 30):
-        time.sleep(30)
+    for page in range(1, 200):
+        time.sleep(20)
         print('crawl page {0}'.format(page))
         re = requests.get("http://www.xicidaili.com/nn/{0}".format(page), headers=headers)
         selector = Selector(text=re.text)
@@ -49,7 +49,8 @@ class GetIP(object):
         return True
 
     def judge_ip(self,ip, port, port_type):
-        http_url = 'https://www.baidu.com/'
+        #http_url = 'https://www.baidu.com/'
+        http_url = 'https://book.douban.com/subject/1474773/'
         proxy_url = '{0}://{1}:{2}'.format(port_type, ip, port)
         try:
             proxy_dict = {

@@ -7,6 +7,7 @@
 
 from scrapy import signals
 from scrapy.dupefilter import RFPDupeFilter
+from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
 from scrapy.utils.request import request_fingerprint
 import MySQLdb
 import redis
@@ -137,21 +138,31 @@ from tools.showProxy import abyun
 class RandomProxyMiddleware(object):
     def __init__(self):
         self.proxyServer = "http://http-cla.abuyun.com:9030"
-        self.proxyUser = "H74R4J0PNLA6131C"
-        self.proxyPass = "CEB943344CA9E602"
+        self.proxyUser = "HJNX23202XF23K6C"
+        self.proxyPass = "38704CF1EEAD9F0A"
         self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
         self.currentTime = time.time()
+
     def process_request(self, request, spider):
-        #request.meta["proxy"] = GetIP().get_random_ip()
-        #print(request.meta['proxy'])
+
+        # request.meta["proxy"] = GetIP().get_random_ip()
+        # print(request.meta['proxy'])
+
         if time.time() - self.currentTime > 3:
             request.headers['Proxy-Switch-Ip'] = 'yes'
-            abyun(self.proxyUser, self.proxyPass).showProxy()
+            #abyun(self.proxyUser, self.proxyPass).showProxy()
             self.currentTime = time.time()
             print("change the proxy")
 
+
         request.meta["proxy"] = self.proxyServer
         request.headers["Proxy-Authorization"] = self.proxyAuth
+        request.headers['Accept'] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+        request.headers['Accept-Encoding'] = "gzip, deflate, br"
+        request.headers['Accept-Language'] = 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6'
+
+
+
 
 
 class CustomFilterMiddleware(RFPDupeFilter):
@@ -190,3 +201,27 @@ class CustomFilterMiddleware(RFPDupeFilter):
         self.fingerprints.add(fp)
         if self.file:
             self.file.write(fp + os.linesep)
+
+# class CustomRedirectMiddleware(RedirectMiddleware):
+#
+#     def process_response(self, request, response, spider):
+#         if (request.meta.get('dont_redirect', False) or
+#                 response.status in getattr(spider, 'handle_httpstatus_list', []) or
+#                 response.status in request.meta.get('handle_httpstatus_list', []) or
+#                 request.meta.get('handle_httpstatus_all', False)):
+#             return response
+#
+#         allowed_status = (301, 302, 303, 307, 308)
+#         if 'Location' not in response.headers or response.status not in allowed_status:
+#             return response
+#
+#         location = safe_url_string(response.headers['location'])
+#
+#         redirected_url = urljoin(request.url, location)
+#
+#         if response.status in (301, 307, 308) or request.method == 'HEAD':
+#             redirected = request.replace(url=redirected_url)
+#             return self._redirect(redirected, request, spider, response.status)
+#
+#         redirected = self._redirect_request_using_get(request, redirected_url)
+#         return self._redirect(redirected, request, spider, response.status)

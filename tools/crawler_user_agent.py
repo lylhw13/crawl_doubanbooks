@@ -44,7 +44,7 @@ class GetUA(object):
         for info in cursor.fetchall():
             ua = info[0]
             return ua
-            #print(ua)
+
 
 
 if __name__ == '__main__':

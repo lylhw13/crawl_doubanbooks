@@ -10,6 +10,8 @@ import scrapy
 
 class DoubanItem(scrapy.Item):
     # define the fields for your item here like:
+    status = scrapy.Field()
+
     url = scrapy.Field()
     id = scrapy.Field()
 
