@@ -24,7 +24,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
     #allowed_domains = ['book.douban.com']
     start_urls = ['http://book.douban.com/tag/']
     tags = []
-    handle_httpstatus_list = [302, 402, 403, 404]  # to handle the blocked
+    handle_httpstatus_list = [302, 402, 403, 404, 503]  # to handle the blocked
 
     def __init__(self):
         #self.fo_error = open('error_url_list.txt','w+')
@@ -87,6 +87,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         for url in df['url'].get_values():
             print(url)
             yield Request(url=url, callback=self.parse_content)
+        #yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
 
 
         #yield Request(url=self.start_urls[0], callback=self.parse_tags)
@@ -127,13 +128,19 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
 
     def parse_content(self, response):
+        #
+        # print(response.headers)
+        # return
+        # print(response.body.decode('utf-8'))
+        # return
 
         item = DoubanItem()
 
-        if response.status != 200 or response.status!=404:
-            print(response.status)
-            print("b"*100 + '  be blocked ')
-            raise CloseSpider("Be blocked  ".format(response.status))
+        if response.status != 200:
+            if response.status != 404:
+                print(response.status)
+                print("b"*100 + '  be blocked ')
+                raise CloseSpider("Be blocked  ".format(response.status))
 
         item['url'] = response.url
 
@@ -163,11 +170,13 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         except Exception:
             message = '{0:30} has error during parse_content\n'.format(item['url'])
             print('c'*150 + message)
-            wait_time = random.random() * 5
-            print('wait time is {}'.format(wait_time))
-            time.sleep(wait_time)
+            # wait_time = random.random() * 5
+            # print('wait time is {}'.format(wait_time))
+            # time.sleep(wait_time)
             with open("error_url_list.txt",'a') as f:
                 f.write(message + '\n')
+            with open('wrong_page_{}.txt'.format(item['id']), 'wb') as f:
+                f.write(response.body)
             #self.fo_error.write(message)
             #error_flag = True
             item['status'] = 'wrong'

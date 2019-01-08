@@ -18,7 +18,7 @@ class DoubanPipeline(object):
 
 class DownloadImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        if item['status'] == 'wrong':
+        if item['status'] != 'ok':
             return
         url = item['img_url']
         yield Request(url=url, meta={'img_name': item['img_name']}, dont_filter=True)
@@ -45,7 +45,7 @@ class DoubanItemPipeline(object):
         # VALUES (%s, %s, %s, %s, %s,%s%s, %s, %s, %s, %s, %s)"""
 
         if item['status'] == '404':
-            insert_404_url = "INSERT IGNORE INTO wrong_url (id,url) VALUES ('{0}','{1}')".format(item['id'],item['url'])
+            insert_404_url = "INSERT IGNORE INTO 404_url (id,url) VALUES ('{0}','{1}')".format(item['id'],item['url'])
             self.cursor.execute(insert_404_url)
             self.conn.commit()
             return

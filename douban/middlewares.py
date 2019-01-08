@@ -137,9 +137,9 @@ import time
 from tools.showProxy import abyun
 class RandomProxyMiddleware(object):
     def __init__(self):
-        self.proxyServer = "http://http-cla.abuyun.com:9030"
-        self.proxyUser = "HJNX23202XF23K6C"
-        self.proxyPass = "38704CF1EEAD9F0A"
+        self.proxyServer = "http://http-pro.abuyun.com:9010"
+        self.proxyUser = "H28O895753S6616P"
+        self.proxyPass = "88DC8A9417346A80"
         self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
         self.currentTime = time.time()
 
@@ -149,17 +149,23 @@ class RandomProxyMiddleware(object):
         # print(request.meta['proxy'])
 
         if time.time() - self.currentTime > 3:
-            request.headers['Proxy-Switch-Ip'] = 'yes'
+            #request.headers['Proxy-Switch-Ip'] = 'yes'
             #abyun(self.proxyUser, self.proxyPass).showProxy()
             self.currentTime = time.time()
             print("change the proxy")
-
 
         request.meta["proxy"] = self.proxyServer
         request.headers["Proxy-Authorization"] = self.proxyAuth
         request.headers['Accept'] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
         request.headers['Accept-Encoding'] = "gzip, deflate, br"
         request.headers['Accept-Language'] = 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6'
+        request.headers['Cache-Control'] = 'max-age=0'
+        #request.headers['Connection'] = 'keep-alive'
+        #request.headers['Host'] = 'book.douban.com'
+        request.headers['DNT'] = '1'
+        request.headers['Upgrade-Insecure-Requests'] = '1'
+
+
 
 
 

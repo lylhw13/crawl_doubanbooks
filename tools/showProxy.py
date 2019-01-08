@@ -8,8 +8,8 @@ targetUrl = "http://proxy.abuyun.com/switch-ip"
 # targetUrl = "http://proxy.abuyun.com/current-ip"
 
 # 代理服务器
-proxyHost = "http-cla.abuyun.com"
-proxyPort = "9030"
+proxyHost = "http-pro.abuyun.com"
+proxyPort = "9010"
 
 # 代理隧道验证信息
 # proxyUser = "H9113R68750H57SC"
@@ -60,12 +60,14 @@ class abyun(object):
         })
         opener = request.build_opener(proxy_handler)
         opener.addheaders = [("Proxy-Switch-Ip", "yes")]
-        opener.addheaders = [('User-Agent', GetUA().get_random_ua())]
+        opener.addheaders.append(('User-Agent', GetUA().get_random_ua()))
         #opener.addheaders = [('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8')]
         #opener.addheaders = [('Connection', 'keep-alive')]
-        opener.addheaders = [('Accept-Encoding','gzip, deflate, br')]
-        opener.addheaders = [('Accept-Language','zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6')]
-        opener.addheaders = [('Cache-Control','max-age=0')]
+        opener.addheaders.append(('Accept-Encoding','gzip, deflate, br'))
+        opener.addheaders.append(('Accept-Language','zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6'))
+        opener.addheaders.append(('Cache-Control','max-age=0'))
+
+
 
         #request.install_opener(opener)
         return opener
@@ -99,10 +101,11 @@ class abyun(object):
         print(rep.decode('utf-8'))
 
 if __name__== "__main__" :
-    user = "H40Z0M7J2MGBMX2C"
-    passwd = "DFD3C823708AC565"
+    print(GetUA().get_random_ua())
+    user = "H38TU3U0EY06456P"
+    passwd = "66380CBCE3CA2C21"
     localabyun = abyun(user, passwd)
-    urls = ["https://httpbin.org/headers", "https://httpbin.org/ip", "https://httpbin.org/user-agent"]
+    urls = ["https://httpbin.org/user-agent", "https://httpbin.org/headers", "https://httpbin.org/ip"]
     for url in urls:
         localabyun.showURL(url)
     localabyun.showProxy()
