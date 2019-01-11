@@ -89,7 +89,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         # yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
 
         # ******method four******
-        for i in range(1355000, 3300000):Dd
+        for i in range(1355000, 3300000):
             url = "https://book.douban.com/subject/{}/".format(i)
             yield Request(url=url, callback=self.parse_content)
 
