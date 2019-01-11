@@ -28,6 +28,11 @@ class DoubanItem(scrapy.Item):
     people = scrapy.Field()     #评价人数
     stars_per = scrapy.Field()
 
+    comments = scrapy.Field()
+    reviews = scrapy.Field()
+
+    description = scrapy.Field()
+
     tags = scrapy.Field()
 
     relate_books = scrapy.Field()

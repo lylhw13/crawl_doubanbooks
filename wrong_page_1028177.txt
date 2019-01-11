@@ -1,1 +1,0 @@
-<script>var d=[navigator.platform,navigator.userAgent,navigator.vendor].join("|");window.location.href="https://sec.douban.com/a?c=ba1c6a&d="+d+"&r=https%3A%2F%2Fbook.douban.com%2Fsubject%2F1028177%2F&k=IIXnTciHkleNataWMZoUZ%2FeXEG1bE6RbpCKebmlLebg";</script>

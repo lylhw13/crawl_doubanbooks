@@ -18,13 +18,14 @@ import scrapy.crawler as crawler
 from twisted.internet import reactor
 import MySQLdb
 import pandas as pd
+import re
 
 class DoubanCrawlByTagSpider(scrapy.Spider):
     name = 'douban_crawl_by_tag'
-    #allowed_domains = ['book.douban.com']
+    allowed_domains = ['book.douban.com', 'doubanio.com']
     start_urls = ['http://book.douban.com/tag/']
     tags = []
-    handle_httpstatus_list = [302, 402, 403, 404, 503]  # to handle the blocked
+    handle_httpstatus_list = [301, 302, 402, 403, 404, 503]  # to handle the blocked
 
     def __init__(self):
         #self.fo_error = open('error_url_list.txt','w+')
@@ -68,7 +69,6 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
         # ******method two******
         # span = 10
-        #
         # start = random.randrange(0, len(tags)-span)
         # print(start)
         # for tag in tags[start: start+span]:
@@ -76,24 +76,29 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         #     url = urllib.parse.urljoin(base_url, urllib.parse.quote(tag))
         #     yield Request(url=url, callback=self.parse)
         #     time.sleep(2)
-        # url = "https://book.douban.com/subject/1000269/"
-        # yield Request(url=url, callback=self.parse_content)
 
         # ******method three******
-        conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='douban', charset='utf8')
+        # conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='douban', charset='utf8')
+        #
+        # sql = "select url from all_urls where state='0' order by rand()"
+        # df = pd.read_sql(sql, conn)
+        # for url in df['url'].get_values():
+        #     print(url)
+        #     yield Request(url=url, callback=self.parse_content)
 
-        sql = "select url from all_urls where state='0' order by rand() limit 1"
-        df = pd.read_sql(sql, conn)
-        for url in df['url'].get_values():
-            print(url)
+        # yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
+
+        # ******method four******
+        for i in range(1355000, 3300000):Dd
+            url = "https://book.douban.com/subject/{}/".format(i)
             yield Request(url=url, callback=self.parse_content)
-        #yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
-
 
         #yield Request(url=self.start_urls[0], callback=self.parse_tags)
         # for tag in self.tags:
         #     url = base_url + urllib.parse.quote(tag)
         #     yield Request(url=url, callback=self.parse)
+        # url = 'https://book.douban.com/subject/1285850/'
+        # yield Request(url=url, callback=self.parse_content)
 
     def parse_tags(self, response):
         tags = response.xpath("//table[@class='tagCol']/tbody/tr/td/a/@href")
@@ -128,7 +133,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
 
     def parse_content(self, response):
-        #
+
         # print(response.headers)
         # return
         # print(response.body.decode('utf-8'))
@@ -136,23 +141,46 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
 
         item = DoubanItem()
 
-        if response.status != 200:
-            if response.status != 404:
-                print(response.status)
-                print("b"*100 + '  be blocked ')
-                raise CloseSpider("Be blocked  ".format(response.status))
-
         item['url'] = response.url
-
         item['id'] = list(filter(None, item['url'].split('/')))[-1]
 
-        if response.status == 404:
-            item['status'] = '404'
-            yield item
+        if response.status != 200:
+            if response.status == 301:
+                new_url = response.headers['Location'].decode('utf-8')
+                parse_url = urllib.parse.urlparse(new_url)
+                if parse_url.netloc == 'book.douban.com':
+                    yield Request(url=new_url, callback=self.parse_content)
+                else:
+                    item['status'] = '301'
+                    item['description'] = "{0} -to- {1}".format(item['url'], new_url)
+                    yield item
+            elif response.status == 404:
+                item['status'] = '404'
+                item['description'] = 'status code 404'
+                yield item
+            else:
+                print(response.status)
+                print("b"*100 + '  be blocked ')
+                # raise CloseSpider("Be blocked  ".format(response.status))
             return
+
+        # if response.status == 404:
+        #     item['status'] = '404'
+        #     item['description'] = ''
+        #     yield item
+        #     return
+        #
+        # parse_url = urllib.parse.urlparse(item['url'])
+        # if parse_url.netloc == 'movie.douban.com':
+        #     item['status'] = '301'
+        #     item['description'] = 'movie.douban.com'
+        #     yield item
+        #     return
 
         #error_flag = False
         item['status'] = 'ok'
+
+        re.compile(r'')
 
         try:
             item['title'] = response.xpath("//span[@property='v:itemreviewed']/text()").extract()[0].strip()
@@ -164,23 +192,58 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
             item['rating'] = rating_item[0].strip() if len(rating_item) != 0 and len(rating_item[0].strip())!=0 else '0'
 
             people_item = response.xpath("//a[@class='rating_people']/span/text()").extract()
-            item['people'] = people_item[0].strip() if len(people_item) != 0 and len(people_item[0].strip())!=0else '0'
+            item['people'] = people_item[0].strip() if len(people_item) != 0 and len(people_item[0].strip())!=0 else '0'
 
 
-        except Exception:
-            message = '{0:30} has error during parse_content\n'.format(item['url'])
-            print('c'*150 + message)
-            # wait_time = random.random() * 5
-            # print('wait time is {}'.format(wait_time))
-            # time.sleep(wait_time)
-            with open("error_url_list.txt",'a') as f:
-                f.write(message + '\n')
-            with open('wrong_page_{}.txt'.format(item['id']), 'wb') as f:
-                f.write(response.body)
-            #self.fo_error.write(message)
-            #error_flag = True
-            item['status'] = 'wrong'
-            raise CloseSpider("Has error in parsing content  ".format(response.status))
+            numpat = re.compile(r'全部 (\d*) 条')
+
+            comments_item = response.xpath("//div[@class='mod-hd']/h2/span[@class='pl']/a/text()").extract()
+            if len(comments_item) != 0 and len(comments_item[0].strip()) != 0:
+                m = numpat.match(comments_item[0])
+                if m:
+                    item['comments'] = m.group(1)
+                else:
+                    item['comments'] = '0'
+            else:
+                item['comments'] = '0'
+
+            reviews_item = response.xpath("//section[@class='reviews mod book-content']/header/h2/span[@class='pl']/a/text()").extract()
+            if len(reviews_item) != 0 and len(reviews_item[0].strip()) != 0:
+                m = numpat.match(reviews_item[0])
+                if m:
+                    item['reviews'] = m.group(1)
+                else:
+                    item['reviews'] = '0'
+            else:
+                item['reviews'] = '0'
+
+        except Exception as e:
+            try:
+                title = response.xpath('//head/title/text()').extract()[0].strip()
+                if re.match(r'.*条目不存在.*', title):
+                    item['title'] = "条目不存在"
+                    item['status'] = '404'
+                    item['description'] = '条目不存在'
+                    yield item
+                    return
+                    #print(item)
+                else:
+                    with open('sepcial_url.txt', 'a') as f:
+                        f.write(response.body)
+            except Exception as e:
+                message = '{0:30} has error during parse_content\n'.format(item['url'])
+                print('c'*150 + message)
+                # wait_time = random.random() * 5
+                # print('wait time is {}'.format(wait_time))
+                # time.sleep(wait_time)
+                with open("error_url_list.txt",'a') as f:
+                    f.write(message + '\n')
+                # with open('wrong_page_{}.txt'.format(item['id']), 'wb') as f:
+                #     f.write(response.body)
+                #self.fo_error.write(message)
+                #error_flag = True
+                item['status'] = 'wrong'
+            # raise CloseSpider("Has error in parsing content  ".format(response.status))
 
         else:
             # parse the information
@@ -237,6 +300,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 # handel the relate url
                 urls = response.xpath("//div[@class='block5 subject_show knnlike']/div/dl/dd/a/@href").extract()
                 for url in urls:
+                    #time.sleep(random.random() * 0.5)
                     yield Request(url=url, callback=self.parse_content)
                 names = response.xpath("//div[@class='block5 subject_show knnlike']/div/dl/dd/a/text()").extract()
 

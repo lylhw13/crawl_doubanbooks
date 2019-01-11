@@ -8,8 +8,8 @@ targetUrl = "http://proxy.abuyun.com/switch-ip"
 # targetUrl = "http://proxy.abuyun.com/current-ip"
 
 # 代理服务器
-proxyHost = "http-pro.abuyun.com"
-proxyPort = "9010"
+proxyHost = "http-dyn.abuyun.com"
+proxyPort = "9020"
 
 # 代理隧道验证信息
 # proxyUser = "H9113R68750H57SC"
@@ -66,6 +66,13 @@ class abyun(object):
         opener.addheaders.append(('Accept-Encoding','gzip, deflate, br'))
         opener.addheaders.append(('Accept-Language','zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6'))
         opener.addheaders.append(('Cache-Control','max-age=0'))
+        # request.headers['Accept'] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+        #
+        # request.headers['Cache-Control'] = 'max-age=0'
+        # #request.headers['Connection'] = 'keep-alive'
+        # #request.headers['Host'] = 'book.douban.com'
+        # request.headers['DNT'] = '1'
+        # request.headers['Upgrade-Insecure-Requests'] = '1'
 
 
 
@@ -102,8 +109,8 @@ class abyun(object):
 
 if __name__== "__main__" :
     print(GetUA().get_random_ua())
-    user = "H38TU3U0EY06456P"
-    passwd = "66380CBCE3CA2C21"
+    user = "H74091703A40MR5D"
+    passwd = "96DF02783452B365"
     localabyun = abyun(user, passwd)
     urls = ["https://httpbin.org/user-agent", "https://httpbin.org/headers", "https://httpbin.org/ip"]
     for url in urls:

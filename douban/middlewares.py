@@ -137,9 +137,9 @@ import time
 from tools.showProxy import abyun
 class RandomProxyMiddleware(object):
     def __init__(self):
-        self.proxyServer = "http://http-pro.abuyun.com:9010"
-        self.proxyUser = "H28O895753S6616P"
-        self.proxyPass = "88DC8A9417346A80"
+        self.proxyServer = "http://http-dyn.abuyun.com:9020"
+        self.proxyUser = "H74091703A40MR5D"
+        self.proxyPass = "96DF02783452B365"
         self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
         self.currentTime = time.time()
 
@@ -159,8 +159,8 @@ class RandomProxyMiddleware(object):
         request.headers['Accept'] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
         request.headers['Accept-Encoding'] = "gzip, deflate, br"
         request.headers['Accept-Language'] = 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,en-US;q=0.6'
-        request.headers['Cache-Control'] = 'max-age=0'
-        #request.headers['Connection'] = 'keep-alive'
+        #request.headers['Cache-Control'] = 'max-age=0'
+        #request.headers['Connection'] = 'close'
         #request.headers['Host'] = 'book.douban.com'
         request.headers['DNT'] = '1'
         request.headers['Upgrade-Insecure-Requests'] = '1'
@@ -178,10 +178,19 @@ class CustomFilterMiddleware(RFPDupeFilter):
         self.redis_db = redis.Redis(host='127.0.0.1', port=6379, db=4)
         self.redis_data_dict = "seen_url"
         self.redis_db.flushdb()
-        if self.redis_db.hlen(self.redis_data_dict) ==0:
+
+        if self.redis_db.hlen(self.redis_data_dict) == 0:
+
             sql = "SELECT url FROM page_content_new"
             df = pd.read_sql(sql, conn)
+            print("page_content_new has {} rows".format(len(df['url'])))
             for url in df['url'].get_values():
+                self.redis_db.hset(self.redis_data_dict, url, 0)
+
+            sql_all = "select url from all_urls where state!='0'"
+            df_all = pd.read_sql(sql_all, conn)
+            print("all_urls has {} rows".format(len(df_all['url'])))
+            for url in df_all['url'].get_values():
                 self.redis_db.hset(self.redis_data_dict, url, 0)
 
         # original

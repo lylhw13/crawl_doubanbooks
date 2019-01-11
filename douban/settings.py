@@ -97,3 +97,5 @@ IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "images"
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+CLOSESPIDER_TIMEOUT = 300

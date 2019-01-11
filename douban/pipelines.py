@@ -11,6 +11,7 @@ from scrapy.pipelines.images import ImagesPipeline
 import os.path
 from scrapy.http import Request
 from scrapy.exceptions import CloseSpider
+import time
 
 class DoubanPipeline(object):
     def process_item(self, item, spider):
@@ -21,10 +22,13 @@ class DownloadImagesPipeline(ImagesPipeline):
         if item['status'] != 'ok':
             return
         url = item['img_url']
-        yield Request(url=url, meta={'img_name': item['img_name']}, dont_filter=True)
+        if url.split('/')[-1] != 'update_image':
+            yield Request(url=url, meta={'img_name': item['img_name']}, dont_filter=True)
 
     def file_path(self, request, response=None, info=None):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)), "img/{}.jpg".format(request.meta['img_name']))
+        # return os.path.join(os.path.abspath(os.path.dirname(__file__)), "img/{}.jpg".format(request.meta['img_name']))
+        return os.path.join("img/{}.jpg".format(request.meta['img_name']))
+
 
 import re
 urlpat = re.compile(r'.* @ (https://book\.douban\.com/subject/(\d*)/?)')
@@ -44,10 +48,35 @@ class DoubanItemPipeline(object):
         # insert into page_content (title, url, num, info, main_info, publish_date, image_name, image_url, rating_num, rating_people, stars_per, tags)
         # VALUES (%s, %s, %s, %s, %s,%s%s, %s, %s, %s, %s, %s)"""
 
-        if item['status'] == '404':
-            insert_404_url = "INSERT IGNORE INTO 404_url (id,url) VALUES ('{0}','{1}')".format(item['id'],item['url'])
-            self.cursor.execute(insert_404_url)
-            self.conn.commit()
+        # if item['status'] == '404':
+        #     # insert_404_url = "INSERT IGNORE INTO 404_url (id,url) VALUES ('{0}','{1}')".format(item['id'],item['url'])
+        #     # try:
+        #     #     self.cursor.execute(insert_404_url)
+        #     #     self.conn.commit()
+        #     # except Exception as e:
+        #     #     print(e)
+        #     #     raise CloseSpider('insert into 404_url encounter error')
+        #
+        #     # set the 404 url state to 4
+        #     update_urls = "insert into all_urls (id,url,state) values (%s,%s,%s) on duplicate key update state=values(state)"
+        #     try:
+        #         self.cursor.execute(update_urls, (item['id'], item['url'], 4))
+        #         self.conn.commit()
+        #     except Exception as e:
+        #         print(e)
+        #         raise CloseSpider("update all_urls encounter error")
+        #     return
+
+        if item['status'] in ['301', '404']:
+            update_urls = "insert into all_urls (id,url,state,description) " \
+                          "values (%s,%s,%s,%s) on duplicate key update state=values(state)"
+
+            try:
+                self.cursor.execute(update_urls, (item['id'], item['url'], item['status'], item['description']))
+                self.conn.commit()
+            except Exception as e:
+                print(e)
+                raise CloseSpider("update all_urls 301 and 404 encounter error")
             return
 
         if item['status'] == 'wrong':
@@ -62,13 +91,16 @@ class DoubanItemPipeline(object):
         # insert into page_content_new
         insert_info = """
                 insert into page_content_new
-                (url, id, title, author, publisher, date, info, img_name, img_url, rating, people, stars_per, tags) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                (url, id, title, author, publisher, date, info, img_name, img_url, rating, people, stars_per, tags, 
+                comments, reviews, query_date) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
         try:
             self.cursor.execute(insert_info, (item['url'], item['id'], item['title'],
                                               item['author'], item['publisher'], item['date'], item['info'],
                                               item['img_name'], item['img_url'], item['rating'],
-                                              item['people'], item['stars_per'], item['tags']))
+                                              item['people'], item['stars_per'], item['tags'],
+                                              item['comments'], item['reviews'],
+                                              time.strftime('%Y-%m-%d', time.localtime())))
             self.conn.commit()
         except Exception as e:
             print(e)
@@ -81,7 +113,7 @@ class DoubanItemPipeline(object):
             self.conn.commit()
         except Exception as e:
             print(e)
-            raise CloseSpider("update all_urls encounter error")
+            raise CloseSpider("update all_urls to 1 encounter error")
 
         # insert ignore into all_urls
         insert_urls = '''insert ignore into all_urls (id,url,state) values '''
@@ -96,16 +128,6 @@ class DoubanItemPipeline(object):
 
         if len(urls_para) != 0:
             insert_urls += ', '.join(urls_para)
-            '''
-            for item in item['relate_books']:
-                if item:
-                    mat = urlpat.match(item)
-                    if mat:
-                        url = mat.group(1)
-                        num = mat.group(2)
-                        self.cursor.execute(insert_urls, (num, url, 0))
-                        self.conn.commit()
-            '''
             try:
                 self.cursor.execute(insert_urls)
                 self.conn.commit()
