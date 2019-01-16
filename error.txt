@@ -1,0 +1,39 @@
+2019-01-15 13:24:27 [scrapy.core.scraper] ERROR: Error downloading <GET https://book.douban.com/subject/1625383/>
+Traceback (most recent call last):
+  File "D:\Python\Envs\douban\lib\site-packages\scrapy\core\downloader\middleware.py", line 43, in process_request
+    defer.returnValue((yield download_func(request=request,spider=spider)))
+scrapy.core.downloader.handlers.http11.TunnelError: Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625411/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625412/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625409/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625403/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625404/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:27 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625413/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625405/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625400/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625402/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625406/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625407/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625408/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:28 [scrapy.downloadermiddlewares.retry] DEBUG: Gave up retrying <GET https://book.douban.com/subject/1625401/> (failed 3 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.core.scraper] ERROR: Error downloading <GET https://book.douban.com/subject/1625401/>
+Traceback (most recent call last):
+  File "D:\Python\Envs\douban\lib\site-packages\scrapy\core\downloader\middleware.py", line 43, in process_request
+    defer.returnValue((yield download_func(request=request,spider=spider)))
+scrapy.core.downloader.handlers.http11.TunnelError: Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625410/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625414/> (failed 1 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625411/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625412/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://book.douban.com/subject/1625409/> (failed 2 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Gave up retrying <GET https://book.douban.com/subject/1625403/> (failed 3 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.core.scraper] ERROR: Error downloading <GET https://book.douban.com/subject/1625403/>
+Traceback (most recent call last):
+  File "D:\Python\Envs\douban\lib\site-packages\scrapy\core\downloader\middleware.py", line 43, in process_request
+    defer.returnValue((yield download_func(request=request,spider=spider)))
+scrapy.core.downloader.handlers.http11.TunnelError: Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:29 [scrapy.downloadermiddlewares.retry] DEBUG: Gave up retrying <GET https://book.douban.com/subject/1625404/> (failed 3 times): Could not open CONNECT tunnel with proxy http-pro.abuyun.com:9010 [{'status': 503, 'reason': b'Service Temporarily Unavailable'}]
+2019-01-15 13:24:30 [scrapy.core.scraper] ERROR: Error downloading <GET https://book.douban.com/subject/1625404/>
+Traceback (most recent call last):
+  File "D:\Python\Envs\douban\lib\site-packages\scrapy\core\downloader\middleware.py", line 43, in process_request
+    defer.returnValue((yield download_func(request=request,spider=spider)))

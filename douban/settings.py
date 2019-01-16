@@ -29,7 +29,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.22
+DOWNLOAD_DELAY = 0.068
 # RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
@@ -58,7 +58,10 @@ COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
     'douban.middlewares.RandomUserAgentMiddleware': 1,
     'douban.middlewares.RandomProxyMiddleware': 2,
-    'douban.middlewares.DoubanDownloaderMiddleware': 543,
+    #'douban.middlewares.DoubanSpiderMiddleware': 3,
+    #'douban.middlewares.DoubanDownloaderMiddleware': 543,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'douban.middlewares.CustomRetryMiddleware': 3,
 }
 DUPEFILTER_CLASS = 'douban.middlewares.CustomFilterMiddleware'
 
@@ -71,7 +74,7 @@ DUPEFILTER_CLASS = 'douban.middlewares.CustomFilterMiddleware'
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'douban.pipelines.DownloadImagesPipeline': 20,
+    #'douban.pipelines.DownloadImagesPipeline': 20,
     'douban.pipelines.DoubanItemPipeline': 30,
 }
 IMAGES_URLS_FIELD = "img_url"
@@ -98,4 +101,5 @@ IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "images"
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-CLOSESPIDER_TIMEOUT = 300
+# close after a time seconds
+#CLOSESPIDER_TIMEOUT = 1500

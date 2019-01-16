@@ -35,7 +35,7 @@ class GetUA(object):
     def get_random_ua(self):
         random_sql = '''
         SELECT user_agent FROM user_agent
-        WHERE version>"60" and os="Windows" and hardware_type="Computer"
+        WHERE version>"65" and os="Windows" and hardware_type="Computer"
         ORDER BY RAND()
         LIMIT 1'''
 

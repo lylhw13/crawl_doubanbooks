@@ -3,41 +3,11 @@
 from urllib import request
 from urllib import error
 
-# 要访问的目标页面
-#targetUrl = "http://test.abuyun.com"
 targetUrl = "http://proxy.abuyun.com/switch-ip"
-# targetUrl = "http://proxy.abuyun.com/current-ip"
 
-# 代理服务器
 proxyHost = "http-pro.abuyun.com"
 proxyPort = "9010"
 
-# 代理隧道验证信息
-# proxyUser = "H9113R68750H57SC"
-# proxyPass = "408F84BD29B6E6E6"
-#
-# proxyMeta = "http://%(user)s:%(pass)s@%(host)s:%(port)s" % {
-#     "host": proxyHost,
-#     "port": proxyPort,
-#     "user": proxyUser,
-#     "pass": proxyPass,
-# }
-#
-# proxy_handler = request.ProxyHandler({
-#     "http": proxyMeta,
-#     "https": proxyMeta,
-# })
-#
-# # auth = request.HTTPBasicAuthHandler()
-# # opener = request.build_opener(proxy_handler, auth, request.HTTPHandler)
-#
-# opener = request.build_opener(proxy_handler)
-#
-# opener.addheaders = [("Proxy-Switch-Ip", "yes")]
-# request.install_opener(opener)
-# resp = request.urlopen(targetUrl).read()
-#
-# print(resp.decode('utf-8'))
 from tools.crawler_user_agent import GetUA
 
 class abyun(object):
@@ -80,7 +50,7 @@ class abyun(object):
         #request.install_opener(opener)
         return opener
 
-    def showProxy(self):
+    def switch_ip(self):
         opener = self.preRequset()
 
         request.install_opener(opener)
@@ -89,7 +59,7 @@ class abyun(object):
         except error.HTTPError as err:
             print(err)
         resp = request.urlopen(targetUrl).read()
-        print("-" * 30 + resp.decode('utf-8'))
+        print(resp.decode('utf-8'))
 
     def showResponse(self):
         opener = self.preRequset()
@@ -120,6 +90,5 @@ if __name__== "__main__" :
     # urls = ["https://httpbin.org/user-agent", "https://httpbin.org/headers", "https://httpbin.org/ip"]
     # for url in urls:
     #     localabyun.showURL(url)
-    localabyun.showProxy()
 
 

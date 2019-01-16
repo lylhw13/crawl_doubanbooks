@@ -8,6 +8,7 @@
 from scrapy import signals
 from scrapy.dupefilter import RFPDupeFilter
 from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
 from scrapy.utils.request import request_fingerprint
 import MySQLdb
 import redis
@@ -16,6 +17,7 @@ import os
 import logging
 from tools.crawler_xici_ip import GetIP
 from tools.crawler_user_agent import GetUA
+from scrapy.http import Request
 
 class DoubanSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -137,22 +139,22 @@ import time
 from tools.showProxy import abyun
 class RandomProxyMiddleware(object):
     def __init__(self):
-        self.proxyServer = "http://http-dyn.abuyun.com:9020"
-        self.proxyUser = "H74091703A40MR5D"
-        self.proxyPass = "96DF02783452B365"
+        self.proxyServer = "http://http-pro.abuyun.com:9010"
+        self.proxyUser = "HQ4M5U3IBDW9912P"
+        self.proxyPass = "5122EDD88D113B9A"
         self.proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((self.proxyUser + ":" + self.proxyPass), "ascii")).decode("utf8")
-        self.currentTime = time.time()
+        #self.currentTime = time.time()
 
     def process_request(self, request, spider):
 
         # request.meta["proxy"] = GetIP().get_random_ip()
         # print(request.meta['proxy'])
 
-        if time.time() - self.currentTime > 3:
-            #request.headers['Proxy-Switch-Ip'] = 'yes'
-            #abyun(self.proxyUser, self.proxyPass).showProxy()
-            self.currentTime = time.time()
-            print("change the proxy")
+        # if time.time() - self.currentTime > 25:
+        #     #request.headers['Proxy-Switch-Ip'] = 'yes'
+        #     #abyun(self.proxyUser, self.proxyPass).showProxy()
+        #     self.currentTime = time.time()
+        #     print("change the proxy")
 
         request.meta["proxy"] = self.proxyServer
         request.headers["Proxy-Authorization"] = self.proxyAuth
@@ -216,6 +218,26 @@ class CustomFilterMiddleware(RFPDupeFilter):
         self.fingerprints.add(fp)
         if self.file:
             self.file.write(fp + os.linesep)
+
+from scrapy.utils.response import response_status_message
+from douban.spiders.douban_crawl_by_tag import DoubanCrawlByTagSpider
+
+import logging
+from scrapy.utils.python import global_object_name
+
+logger = logging.getLogger(__name__)
+class CustomRetryMiddleware(RetryMiddleware):
+
+    def process_exception(self, request, exception, spider):
+        if str(exception).startswith('Could not open CONNECT tunnel with proxy'):
+            print('sleep 2 seconds')
+            time.sleep(2)
+            return Request(url='http://proxy.abuyun.com/switch-ip', callback=None, dont_filter=True)
+
+        if isinstance(exception, self.EXCEPTIONS_TO_RETRY) \
+                and not request.meta.get('dont_retry', False):
+            return self._retry(request, exception, spider)
+
 
 # class CustomRedirectMiddleware(RedirectMiddleware):
 #

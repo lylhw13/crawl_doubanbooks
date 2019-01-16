@@ -22,10 +22,11 @@ import re
 
 class DoubanCrawlByTagSpider(scrapy.Spider):
     name = 'douban_crawl_by_tag'
-    allowed_domains = ['book.douban.com', 'doubanio.com']
+    allowed_domains = ['book.douban.com', 'doubanio.com', 'http://proxy.abuyun.com']
     start_urls = ['http://book.douban.com/tag/']
     tags = []
-    handle_httpstatus_list = [301, 302, 402, 403, 404, 503]  # to handle the blocked
+    handle_httpstatus_list = [301, 302, 402, 403, 404]  # to handle the blocked
+    retry_http_codes = [402, 503]
 
     def __init__(self):
         #self.fo_error = open('error_url_list.txt','w+')
@@ -35,6 +36,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         #         key, value = line.split(':')
         #         if key:
         #             self.info_tags_dict[key] = int(value.strip())
+        self.currentTime = time.time()
         pass
 
     @classmethod
@@ -89,7 +91,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         # yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
 
         # ******method four******
-        for i in range(1355000, 3300000):
+        for i in range(2200000, 33000000):
             url = "https://book.douban.com/subject/{}/".format(i)
             yield Request(url=url, callback=self.parse_content)
 
@@ -97,7 +99,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         # for tag in self.tags:
         #     url = base_url + urllib.parse.quote(tag)
         #     yield Request(url=url, callback=self.parse)
-        # url = 'https://book.douban.com/subject/1285850/'
+        # url = 'https://book.douban.com/subject/1650033/'
         # yield Request(url=url, callback=self.parse_content)
 
     def parse_tags(self, response):
@@ -129,15 +131,23 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 yield Request(url=url, callback=self.parse_content, errback=self.errback)
         next_page = response.xpath("//link[@rel='next']/@href").extract()
         if next_page:
-            yield Request(url=urllib.parse.urljoin(response.url,next_page[0]), callback=self.parse, errback=self.errback)
+            yield Request(url=urllib.parse.urljoin(response.url, next_page[0]), callback=self.parse, errback=self.errback)
 
+    def switch_ip(self):
+        print(' switch_ip ' * 10)
+        self.currentTime = time.time()
+        yield Request(url='http://proxy.abuyun.com/switch-ip',callback=self.show_response, dont_filter=True)
+
+    def show_response(self, response):
+        print(response.body.decode('utf-8'))
 
     def parse_content(self, response):
-
         # print(response.headers)
-        # return
         # print(response.body.decode('utf-8'))
         # return
+
+        # if 'status' in response.body.decode('utf-8'):
+        #     print(response.body.decode('utf-8'))
 
         item = DoubanItem()
 
@@ -151,16 +161,20 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 if parse_url.netloc == 'book.douban.com':
                     yield Request(url=new_url, callback=self.parse_content)
                 else:
-                    item['status'] = '301'
-                    item['description'] = "{0} -to- {1}".format(item['url'], new_url)
+                    item['status'] = response.status
+                    item['description'] = new_url
                     yield item
             elif response.status == 404:
-                item['status'] = '404'
+                item['status'] = response.status
                 item['description'] = 'status code 404'
                 yield item
+            # elif response.status == 503:
+            #     self.switch_ip()
             else:
                 print(response.status)
                 print("b"*100 + '  be blocked ')
+                yield Request(url='http://proxy.abuyun.com/switch-ip', callback=self.show_response, dont_filter=True)
+                #self.switch_ip()
                 # raise CloseSpider("Be blocked  ".format(response.status))
             return
 
@@ -232,7 +246,7 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                         f.write(response.body)
             except Exception as e:
                 message = '{0:30} has error during parse_content\n'.format(item['url'])
-                print('c'*150 + message)
+                print('c'*100 + message)
                 # wait_time = random.random() * 5
                 # print('wait time is {}'.format(wait_time))
                 # time.sleep(wait_time)
@@ -243,6 +257,8 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 #self.fo_error.write(message)
                 #error_flag = True
                 item['status'] = 'wrong'
+                yield Request(url='http://proxy.abuyun.com/switch-ip', callback=self.show_response, dont_filter=True)
+                # self.switch_ip()
             # raise CloseSpider("Has error in parsing content  ".format(response.status))
 
         else:
