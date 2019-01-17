@@ -91,8 +91,14 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
         # yield Request(url="https://httpbin.org/headers", callback=self.parse_content)
 
         # ******method four******
-        for i in range(2200000, 33000000):
-            url = "https://book.douban.com/subject/{}/".format(i)
+        # for i in range(2200000, 33000000):
+        #     url = "https://book.douban.com/subject/{}/".format(i)
+        #     yield Request(url=url, callback=self.parse_content)
+
+        # ******method five******
+        while True:
+            index = random.randrange(2835000, 31000000)
+            url = "https://book.douban.com/subject/{}/".format(index)
             yield Request(url=url, callback=self.parse_content)
 
         #yield Request(url=self.start_urls[0], callback=self.parse_tags)
@@ -161,11 +167,11 @@ class DoubanCrawlByTagSpider(scrapy.Spider):
                 if parse_url.netloc == 'book.douban.com':
                     yield Request(url=new_url, callback=self.parse_content)
                 else:
-                    item['status'] = response.status
+                    item['status'] = '301'
                     item['description'] = new_url
                     yield item
             elif response.status == 404:
-                item['status'] = response.status
+                item['status'] = '404'
                 item['description'] = 'status code 404'
                 yield item
             # elif response.status == 503:

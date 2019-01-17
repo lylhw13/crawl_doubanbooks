@@ -104,7 +104,7 @@ class DoubanItemPipeline(object):
             self.conn.commit()
         except Exception as e:
             print(e)
-            raise CloseSpider("insert page_content_new encounter error")
+            # raise CloseSpider("insert page_content_new encounter error")
 
         # insert into all_urls on duplicate key
         update_urls = "insert into all_urls (id,url,state) values (%s,%s,%s) on duplicate key update state=values(state)"
